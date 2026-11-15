@@ -8,7 +8,7 @@ import {
   exportInvoice,
   rememberClient,
   filename,
-} from "../src/desktop/model";
+} from "../src/model";
 describe("local invoice lifecycle", () => {
   it("retains defaults, rolls numbering, resets dates and archives the exact raw draft", () => {
     const state = initialState();
@@ -88,3 +88,16 @@ describe('invoice basics',()=>{
 });
 
 it('rejects discounts greater than the line amount',()=>{const invoice=initialState().draft.invoice;invoice.items[0]={...invoice.items[0],amount:1,netPrice:20,discountType:'amount',discountValue:50};expect(()=>exportInvoice(invoice)).toThrow('Discount must not exceed');});
+
+it('normalizes typed numeric fields so preview and export agree without changing the draft', () => {
+  const invoice = initialState().draft.invoice;
+  Object.assign(invoice.seller, { name: 'Seller', address: '1 Main St' });
+  Object.assign(invoice.buyer, { name: 'Buyer', address: '2 Main St' });
+  Object.assign(invoice.items[0], { amount: '2', netPrice: '150', vat: '10', discountValue: '20' });
+  const preview = calculatedInvoice(invoice);
+  const exported = exportInvoice(invoice);
+  expect(preview.items[0]).toEqual(exported.items[0]);
+  expect(preview.items[0].discountValue).toBe(20);
+  expect(preview.items[0].vat).toBe(10);
+  expect(invoice.items[0].discountValue).toBe('20');
+});

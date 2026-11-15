@@ -2,9 +2,9 @@ import React from "react";
 import { describe, it, expect } from "vitest";
 import { Font, renderToBuffer } from "@react-pdf/renderer";
 import { existsSync } from "node:fs";
-import { initialState, calculatedInvoice } from "../src/desktop/model";
-import { InvoicePdfTemplate } from "../src/app/(main)/(app)/components/invoice-templates/invoice-pdf-default-template";
-import { StripeInvoicePdfTemplate } from "../src/app/(main)/(app)/components/invoice-templates/invoice-pdf-stripe-template";
+import { initialState, calculatedInvoice } from "../src/model";
+import { InvoicePdfTemplate } from "../src/pdf/classic";
+import { StripeInvoicePdfTemplate } from "../src/pdf/stripe";
 Font.register({
   family: "InvoiceFallback",
   fonts: [

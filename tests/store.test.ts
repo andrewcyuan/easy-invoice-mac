@@ -1,6 +1,6 @@
 import {beforeEach,afterEach,describe,it,expect,vi} from 'vitest';
-import {initialState} from '../src/desktop/model';
-import {createStore,loadState} from '../src/desktop/store';
+import {initialState} from '../src/model';
+import {createStore,loadState} from '../src/store';
 const {invoke}=vi.hoisted(()=>({invoke:vi.fn()}));
 vi.mock('@tauri-apps/api/core',()=>({invoke,isTauri:()=>true}));
 beforeEach(()=>{vi.useFakeTimers();invoke.mockReset();invoke.mockResolvedValue(undefined);const data=new Map<string,string>();vi.stubGlobal('localStorage',{getItem:(key:string)=>data.get(key)??null,setItem:(key:string,value:string)=>data.set(key,value)});});

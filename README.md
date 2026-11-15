@@ -35,7 +35,9 @@ New invoice archives the previous draft in `archives` inside the JSON file. Ther
 
 ## Reuse and scope
 
-The original architecture used Next.js around a React Hook Form editor, Zod schema, two react-pdf document trees, and browser storage. The editor also coupled sharing, analytics, and web-specific controls. This fork retains the schema, both PDF component trees, translations, number formatting, amount-in-words, item discount/tax calculations, and Tailwind input/textarea components. Controls use Base UI with shadcn-style semantic tokens; system dark mode uses gray surfaces. A compact form replaces the web editor. Only the PDF entry points, font/style injection, page size, and promotional footers/metadata changed in the document layouts.
+The original architecture used Next.js around a React Hook Form editor, Zod schema, two react-pdf document trees, and browser storage. The editor also coupled sharing, analytics, and web-specific controls. This fork retains the invoice validation, calculations, and two PDF layouts. Controls use Base UI and plain CSS with shadcn-style tokens; system dark mode uses gray surfaces. PDF labels are English. Unused web metadata, translation tables, spelled-out totals, QR code rendering, and Tailwind tooling have been removed.
+
+`src/App.tsx` contains the editor; `model.ts` and `store.ts` handle defaults and persistence. `src/invoice/` holds validation, calculations, and formatting. Each PDF layout lives in one file in `src/pdf/`. Font loading and PDF preview remain separate because they handle native resources and asynchronous rendering.
 
 Next.js, APIs, marketing pages, sharing, cloud integrations, and telemetry are removed. Native code is limited to local JSON persistence, the Save dialog, close handling, and an AppKit/Core Text font bridge. The preview renders PDF pages offscreen and replaces them together, so typing does not blank the existing preview.
 

@@ -1,9 +1,8 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
-import { App } from "./desktop/App";
-import { loadState, createStore } from "./desktop/store";
-import { listFonts, systemFont } from "./desktop/fonts";
-import "./desktop/styles.css";
+import { App } from "./App";
+import { loadState, createStore } from "./store";
+import { listFonts, systemFont } from "./fonts";
+import "./styles.css";
 const root = createRoot(document.getElementById("root")!);
 root.render(<div className="fatal">Opening your invoice…</div>);
 Promise.all([loadState(), listFonts().catch(() => [systemFont])])
