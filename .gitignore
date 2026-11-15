@@ -1,64 +1,7 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
-
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files: every .env* (plaintext or dotenvx-encrypted, including the dotenvx
-# private-key file .env.keys). Only the template is committed.
-.env*
-!.env.example
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# Sentry Config File
-.env.sentry-build-plugin
-
-# Playwright
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright-output/
-/playwright-test-downloads/
-/scripts/page-atlas/output/
-
-.playwright-mcp
-
-# oxlint / oxfmt
-.oxlintcache
-
-# i18n
-messages/en.d.json.ts
-
-.pnpm-store/
-
-.github/workflows/.secrets
-.trigger
+dist/
+src-tauri/target/
+src-tauri/gen/
+src-tauri/resources/source.tar.gz
+.DS_Store
+test-results/

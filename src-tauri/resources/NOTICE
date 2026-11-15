@@ -1,0 +1,6 @@
+Invoice for macOS is a modified version of EasyInvoicePDF by Vlad Sazonau and contributors.
+Upstream: https://github.com/VladSez/easy-invoice-pdf
+This distribution is licensed under AGPL-3.0-only; see LICENSE.
+Modified November 2026: local Tauri shell, native fonts, persistence, unbranded PDFs.
+Complete corresponding application source and build scripts are included in source.tar.gz.
+Open Sans is distributed under the SIL Open Font License in the source public/fonts/OFL.txt.

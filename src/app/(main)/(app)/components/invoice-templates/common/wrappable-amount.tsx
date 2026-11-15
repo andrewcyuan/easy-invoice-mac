@@ -1,4 +1,4 @@
-import { Text, View } from "@react-pdf/renderer/lib/react-pdf.browser";
+import { Text, View } from "@react-pdf/renderer";
 import type { ComponentProps } from "react";
 
 type ViewStyle = ComponentProps<typeof View>["style"];

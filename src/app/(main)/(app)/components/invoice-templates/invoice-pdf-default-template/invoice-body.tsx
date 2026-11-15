@@ -1,4 +1,4 @@
-import { Text, View } from "@react-pdf/renderer/lib/react-pdf.browser";
+import { Text, View } from "@react-pdf/renderer";
 import dayjs from "dayjs";
 
 import { InvoiceQRCode } from "@/app/(main)/(app)/components/invoice-templates/common/invoice-qr-code";

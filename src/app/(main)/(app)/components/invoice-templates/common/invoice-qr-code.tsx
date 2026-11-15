@@ -1,4 +1,4 @@
-import { Image, Text, View } from "@react-pdf/renderer/lib/react-pdf.browser";
+import { Image, Text, View } from "@react-pdf/renderer";
 
 interface InvoiceQRCodeProps {
   qrCodeDataUrl: string;

@@ -1,12 +1,9 @@
-import * as Sentry from "@sentry/nextjs";
-import { toast } from "sonner";
 import { z } from "zod";
 
 import {
   SUPPORTED_INVOICE_PDF_LANGUAGES,
   type SupportedLanguages,
 } from "@/app/schema";
-import { trackEvent } from "@/lib/analytics/track-event";
 import { numberToWords } from "@/utils/number-to-words";
 
 /**
@@ -56,9 +53,6 @@ export function getAmountInWords({
 
   if (!result.success) {
     console.error("Validation error:", result.error);
-    toast.error("Invalid input data for amount in words", {
-      id: "get-amount-in-words-invalid-input-data-error-toast",
-    });
 
     return "-/-";
   }
@@ -76,19 +70,10 @@ export function getAmountInWords({
     amountInWords = words ?? amountAsDigits(result.data.amount);
   } catch (error) {
     console.error("Failed to convert number to words:", error);
-    toast.error("Failed to convert number to words", {
-      id: "get-amount-in-words-failed-to-convert-number-to-words-error-toast",
-    });
 
     if (error instanceof Error) {
-      trackEvent({
-        event: "error_converting_number_to_words",
-        data: {
-          error: error?.message ?? "Unknown error",
-        },
-      });
 
-      Sentry.captureException(error);
+      console.error(error);
     }
 
     amountInWords = amountAsDigits(Math.floor(amount));
@@ -109,9 +94,6 @@ export function getNumberFractionalPart(total = 0) {
 
   if (!parsedTotal.success) {
     console.error("Validation error:", parsedTotal.error);
-    toast.error("Invalid input data for number fractional part", {
-      id: "get-number-fractional-part-invalid-input-data-error-toast",
-    });
 
     return "-/-";
   }

@@ -1,32 +1,20 @@
 import {
   Document,
-  Font,
   Page,
   StyleSheet,
   type Styles,
-} from "@react-pdf/renderer/lib/react-pdf.browser";
+} from "@react-pdf/renderer";
 
 import { type InvoiceData } from "@/app/schema";
-import { INVOICE_PDF_FONTS } from "@/config";
+import { adaptStyles, type PdfAppearance } from "@/desktop/pdf-appearance";
 
 import { InvoiceBody } from "./invoice-body";
 
 // Open sans seems to be working fine with EN and PL
-const fontFamily = "Open Sans";
-const fontFamilyBold = "Open Sans";
+const fontFamily = "InvoiceFallback";
+const fontFamilyBold = "InvoiceFallback";
 
-Font.register({
-  family: fontFamily,
-  fonts: [
-    {
-      src: INVOICE_PDF_FONTS.DEFAULT_TEMPLATE.OPEN_SANS_REGULAR,
-    },
-    {
-      src: INVOICE_PDF_FONTS.DEFAULT_TEMPLATE.OPEN_SANS_700,
-      fontWeight: 700,
-    },
-  ],
-});
+
 
 // Styles for the PDF
 export const PDF_DEFAULT_TEMPLATE_STYLES = StyleSheet.create({
@@ -198,24 +186,27 @@ export const PDF_DEFAULT_TEMPLATE_STYLES = StyleSheet.create({
 export function InvoicePdfTemplate({
   invoiceData,
   qrCodeDataUrl,
+  appearance,
 }: {
   invoiceData: InvoiceData;
   qrCodeDataUrl?: string;
+  appearance?: PdfAppearance;
 }) {
+  const styles = adaptStyles(PDF_DEFAULT_TEMPLATE_STYLES, appearance);
   const invoiceNumberLabel = invoiceData?.invoiceNumberObject?.label;
 
   const invoiceNumberValue = invoiceData?.invoiceNumberObject?.value;
 
   const invoiceNumber = `${invoiceNumberLabel} ${invoiceNumberValue}`;
   const invoiceDocTitle =
-    `${invoiceNumber} | Created with https://easyinvoicepdf.com` as const;
+    `${invoiceNumber}` as const;
 
   return (
     <Document title={invoiceDocTitle}>
-      <Page size="A4" style={PDF_DEFAULT_TEMPLATE_STYLES.page}>
+      <Page size={appearance?.pageSize ?? "A4"} style={styles.page}>
         <InvoiceBody
           invoiceData={invoiceData}
-          styles={PDF_DEFAULT_TEMPLATE_STYLES}
+          styles={styles}
           qrCodeDataUrl={qrCodeDataUrl}
         />
       </Page>

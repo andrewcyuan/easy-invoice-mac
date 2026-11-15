@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/nextjs";
 
 import type {
   SupportedCurrencies,
@@ -181,7 +180,7 @@ export function formatCurrencyChunks({
       },
     });
   } catch (error) {
-    Sentry.captureException(error);
+    console.error(error);
 
     return [FALLBACK_AMOUNT];
   }

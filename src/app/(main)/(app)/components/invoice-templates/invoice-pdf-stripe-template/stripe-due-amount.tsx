@@ -1,4 +1,4 @@
-import { Text, View, Link } from "@react-pdf/renderer/lib/react-pdf.browser";
+import { Text, View, Link } from "@react-pdf/renderer";
 import dayjs from "dayjs";
 
 import { INVOICE_PDF_TRANSLATIONS } from "@/app/(main)/(app)/pdf-i18n-translations/pdf-translations";
