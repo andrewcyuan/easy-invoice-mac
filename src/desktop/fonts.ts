@@ -92,15 +92,15 @@ export function loadFont(id: string, fonts: LocalFont[]) {
       }),
     );
     Font.register({ family, fonts: sources });
-    await Font.load({
-      fontFamily: family,
-      fontWeight: 400,
-      fontStyle: selected.italic ? "italic" : "normal",
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error("This font took too long to load.")), 8000);
+      Font.load({
+        fontFamily: family,
+        fontWeight: 400,
+        fontStyle: selected.italic ? "italic" : "normal",
+      }).then(() => { clearTimeout(timeout); resolve(); }, error => { clearTimeout(timeout); reject(error); });
     });
-    // Register the same extracted bytes with WebKit for an accurate selector preview.
-    const face = new FontFace(family, `url("${sources[0].src}")`);
-    await face.load();
-    document.fonts.add(face);
+    // The picker uses installed CSS font families directly; only PDF rendering needs these bytes.
     return { family, warning: "", weight: 400, italic: selected.italic };
   })().catch((e) => ({
     family: "InvoiceFallback",
