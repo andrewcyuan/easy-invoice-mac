@@ -67,3 +67,24 @@ describe("local invoice lifecycle", () => {
     expect(nextNumber("INV")).toBe("INV-001");
   });
 });
+
+describe('invoice basics',()=>{
+ const validInvoice=()=>{const invoice=initialState().draft.invoice;return {...invoice,seller:{...invoice.seller,name:'Seller',address:'1 Main St'},buyer:{...invoice.buyer,name:'Buyer',address:'2 Main St'}};};
+ it.each([
+  {amount:2,rate:10.01,tax:8.25,discount:0,type:'percentage',total:21.67},
+  {amount:2,rate:100,tax:10,discount:25,type:'amount',total:192.5},
+  {amount:1,rate:20,tax:10,discount:20,type:'amount',total:0},
+ ])('calculates rounded line totals: $total',({amount,rate,tax,discount,type,total})=>{
+  const invoice=validInvoice();invoice.items[0]={...invoice.items[0],amount,netPrice:rate,vat:tax,discountValue:discount,discountType:type as 'amount'|'percentage'};
+  const before=structuredClone(invoice);expect(exportInvoice(invoice).total).toBe(total);expect(invoice).toEqual(before);
+ });
+ it.each([-1,Infinity,1_000_000_001])('rejects invalid rates: %s',rate=>{const invoice=validInvoice();invoice.items[0].netPrice=rate;expect(()=>exportInvoice(invoice)).toThrow();});
+ it('rejects malformed and backwards dates',()=>{const invoice=validInvoice();expect(()=>exportInvoice({...invoice,dateOfIssue:'2026-02-30'})).toThrow();expect(()=>exportInvoice({...invoice,dateOfIssue:'2026-12-01',paymentDue:'2026-11-01'})).toThrow();});
+ it('keeps logo, font, page size, currency, tax and payment defaults across new invoices',()=>{
+  const state=initialState();state.defaults={...state.defaults,fontId:'Example-Italic',fontSize:12,pageSize:'A4',termsDays:14,taxRate:20,invoice:{...state.defaults.invoice,currency:'EUR',logo:'data:image/png;base64,example',seller:{...state.defaults.invoice.seller,notes:'Bank transfer'}}};
+  const before=structuredClone(state);const next=newInvoice(state,'2026-11-15');
+  expect(next.draft).toMatchObject({fontId:'Example-Italic',fontSize:12,pageSize:'A4',taxRate:20,invoice:{currency:'EUR',logo:'data:image/png;base64,example',paymentDue:'2026-11-29',seller:{notes:'Bank transfer'}}});expect(state).toEqual(before);
+ });
+});
+
+it('rejects discounts greater than the line amount',()=>{const invoice=initialState().draft.invoice;invoice.items[0]={...invoice.items[0],amount:1,netPrice:20,discountType:'amount',discountValue:50};expect(()=>exportInvoice(invoice)).toThrow('Discount must not exceed');});
